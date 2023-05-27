@@ -12,14 +12,14 @@ func _ready():
 	computer_timer = Timer.new()
 	add_child(computer_timer)
 	computer_timer.connect("timeout", self,"_on_computer_Timer_timeout")
-	computer_timer.set_wait_time(20.0)
+	computer_timer.set_wait_time(10.0)
 	computer_timer.set_one_shot(false)
 	computer_timer.start()
 	
 	switch_timer = Timer.new()
 	add_child(switch_timer)
 	switch_timer.connect("timeout", self,"_on_switch_Timer_timeout")
-	switch_timer.set_wait_time(20.0)
+	switch_timer.set_wait_time(10.0)
 	switch_timer.set_one_shot(false)
 	switch_timer.start()
 	
