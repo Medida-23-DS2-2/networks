@@ -6,7 +6,6 @@ var rng = RandomNumberGenerator.new()
 func _ready():
 	
 	var rpos = Vector2(rng.randi_range(0,13),rng.randi_range(0,7))
-	print(rpos)
 	position_in_grit(rpos)
 
 
