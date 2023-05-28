@@ -8,7 +8,7 @@ var connections = []
 var selected_tiles = []
 
 var switches = []
-
+var remaining_tiles = []
 
 func _ready():
 	rng = RandomNumberGenerator.new()
@@ -28,8 +28,15 @@ func _ready():
 	switch_timer.set_one_shot(false)
 	switch_timer.start()
 	
+	_init_remaining_tiles()
+	
 	_on_computer_Timer_timeout()
 	_on_switch_Timer_timeout()
+
+func _init_remaining_tiles():
+	for i in 16:
+		for j in 9:
+			remaining_tiles.append(Vector2(i,j))
 
 func _physics_process(delta):
 	if(Input.is_action_pressed("mb_left")):
@@ -69,6 +76,8 @@ func _delete_connection():
 			var cable = connections[cable_index]
 			for rtile in cable:
 				if (get_cellv(rtile)>1&&get_cellv(rtile)<8):
+					remaining_tiles.append(rtile)
+					Global.remaining_tiles_count = remaining_tiles.size()
 					set_cellv(rtile, 0)
 					set_cellv(cable[0],8)
 					var end = cable[cable.size()-1]
@@ -100,6 +109,8 @@ func _finish_selection():
 		var end = selected_tiles[selected_tiles.size()-1]
 		if (get_cellv(start)==8&&get_cellv(end)>=10&&get_cellv(end)<=25):
 			for i in selected_tiles.size():
+				remaining_tiles.remove(remaining_tiles.find(selected_tiles[i]))
+				Global.remaining_tiles_count = remaining_tiles.size()
 				if (i==0):
 					set_cellv(selected_tiles[0],9)
 				if (i==selected_tiles.size()-1):
@@ -201,12 +212,15 @@ func _on_switch_Timer_timeout():
 	switches.append([pos[0],pos[1], 0, [0,0,0,0]])
 
 func _get_random_pos():
-	var rngPos
-	while(true):
-		rngPos = Vector2(rng.randi_range(0,15), rng.randi_range(0,8))
-		if (get_cellv(rngPos)==0):
-			break
-	return rngPos
+	if (remaining_tiles.empty()):
+		print("finish")
+		return Vector2(0,0)
+	else:
+		var random = rng.randi_range(0,remaining_tiles.size()-1)
+		var rngPos = remaining_tiles[random]
+		remaining_tiles.remove(random)
+		Global.remaining_tiles_count = remaining_tiles.size()
+		return rngPos
 	
 func _update_score():
 	Global.score = connections.size()
