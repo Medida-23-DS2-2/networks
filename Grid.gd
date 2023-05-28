@@ -12,6 +12,7 @@ var switches = []
 
 func _ready():
 	rng = RandomNumberGenerator.new()
+	rng.randomize()
 	
 	computer_timer = Timer.new()
 	add_child(computer_timer)
@@ -62,7 +63,6 @@ func _delete_connection():
 	if (get_cellv(tile)>=2&&get_cellv(tile)<=9):
 		var cable_index = -1
 		for i in connections.size():
-			connections[i]
 			if (connections[i].has(tile)):
 				cable_index = i
 		if (cable_index!=-1):
@@ -86,6 +86,7 @@ func _delete_connection():
 								ports[3] = 0
 							_update_switch_sprites()
 			connections.remove(cable_index)
+			_update_score()
 
 func _cancel_selection():
 	for i in selected_tiles.size():
@@ -144,6 +145,7 @@ func _finish_selection():
 						if (diff==Vector2(-1,-1)):
 							set_cellv(selected_tiles[i], 6)
 			connections.append(selected_tiles.duplicate())
+			_update_score()
 			selected_tiles.clear()
 		else:
 			_cancel_selection()
@@ -201,7 +203,10 @@ func _on_switch_Timer_timeout():
 func _get_random_pos():
 	var rngPos
 	while(true):
-		rngPos = Vector2(rng.randi_range(0,13), rng.randi_range(0,7))
+		rngPos = Vector2(rng.randi_range(0,15), rng.randi_range(0,8))
 		if (get_cellv(rngPos)==0):
 			break
 	return rngPos
+	
+func _update_score():
+	Global.score = connections.size()
