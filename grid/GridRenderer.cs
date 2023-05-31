@@ -6,7 +6,7 @@ public class GridRenderer : Node2D
   Grid grid = ResourceLoader.Load("res://grid/Grid.tres") as Grid;
 
   [Export]
-  public Color lineColor;
+  public Color lineColor = Color.Color8(255, 255, 255);
   public override void _Draw()
   {
     drawGridLines();
@@ -37,7 +37,10 @@ public class GridRenderer : Node2D
       Vector2 to = new Vector2(xCoord * grid.cellSize.x, yMax);
       DrawLine(from, to, lineColor);
     }
+  }
 
+  void drawEntities()
+  {
 
   }
 }

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using System.Linq;
 
 public class Grid : Resource
 {
@@ -13,44 +14,73 @@ public class Grid : Resource
 
   Vector2 calculateMapPosition(Vector2 cell)
   {
-    return cell * cellSize + (cellSize / 2);
+    return cell * this.cellSize + (this.cellSize / 2);
   }
 
   Vector2 calculateGridPosition(Vector2 mapPosition)
   {
-    return (mapPosition / cellSize).Floor();
+    return (mapPosition / this.cellSize).Floor();
   }
 
-  // Resolves to an array of grid entities that contains references to 
+  // Resolves to an array of grid indices that contain references to their respective contents
   public GridEntity[] getResolvedGridEntities()
   {
     GridEntity[] resolved = Array.Empty<GridEntity>();
-    foreach (var entity in _entities)
+    foreach (var entity in this._entities)
     {
-      int rootIndex = Array.FindIndex(_entities, e => e == entity);
-      Vector2 rootVector = asVector(rootIndex);
+      int rootIndex = Array.FindIndex(this._entities, e => e == entity);
+      Vector2 rootCell = asVector(rootIndex);
       for (int deltaDimX = 0; deltaDimX < entity.dimension.x; deltaDimX++)
       {
         for (int deltaDimY = 0; deltaDimY < entity.dimension.y; deltaDimX++)
         {
-          Vector2 currentGridPosition = new Vector2(rootVector.x + deltaDimX, rootVector.y + deltaDimY);
+          int dX = (int)rootCell.x + deltaDimX;
+          int dY = (int)rootCell.y + deltaDimY;
+          Vector2 currentGridPosition = new Vector2(dX, dY);
+
+          if (!isWithinBounds(currentGridPosition))
+          {
+            throw new ArgumentOutOfRangeException($"Entity {entity.GetInstanceId()} is out of bounds for dimension (${dX}, ${dY})");
+          }
+
           resolved[asIndex(currentGridPosition)] = entity;
         }
       }
-
-      // resolved[asIndex(entity.)]
     }
     return resolved;
   }
 
   void addGridEntity(GridEntity entity, Vector2 rootCell)
   {
+    GridEntity[] resolvedGridEntities = getResolvedGridEntities();
+    for (int deltaDimX = 0; deltaDimX < entity.dimension.x; deltaDimX++)
+    {
+      for (int deltaDimY = 0; deltaDimY < entity.dimension.y; deltaDimX++)
+      {
+        int dX = (int)rootCell.x + deltaDimX;
+        int dY = (int)rootCell.y + deltaDimY;
+        Vector2 currentGridPosition = new Vector2(dX, dY);
 
+        if (!isWithinBounds(currentGridPosition))
+        {
+          throw new ArgumentOutOfRangeException($"Entity {entity.GetInstanceId()} is out of bounds for dimension (${dX}, ${dY})");
+        }
+
+        if (!isEmptyCell(currentGridPosition))
+        {
+          throw new ArgumentException($"Entity {entity.GetInstanceId()} is trying to reserve blocked tiles for dimension (${dX}, ${dY})");
+        }
+      }
+    }
+
+    this._entities[asIndex(rootCell)] = entity;
+    GetLocalScene().AddChild(entity);
   }
 
-  /* 	bool isEmptyCell(Vector2 cell) {
-      return (cell)
-    } */
+  bool isEmptyCell(Vector2 cell)
+  {
+    return getResolvedGridEntities().ElementAtOrDefault(asIndex(cell)) == null;
+  }
 
   bool isWithinBounds(Vector2 cell)
   {
@@ -59,12 +89,12 @@ public class Grid : Resource
 
   int asIndex(Vector2 cell)
   {
-    return (int)(cell.x + size.x * cell.y);
+    return (int)(cell.x + this.size.x * cell.y);
   }
 
   Vector2 asVector(int index)
   {
-    return new Vector2(index % size.x, (float)Math.Floor(index / size.x));
+    return new Vector2(index % this.size.x, (float)Math.Floor(index / this.size.x));
   }
 
   //  // Called every frame. 'delta' is the elapsed time since the previous frame.
