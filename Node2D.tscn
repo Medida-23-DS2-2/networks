@@ -1,11 +1,13 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=11 format=2]
 
-[ext_resource path="res://grid_texture.png" type="Texture" id=1]
-[ext_resource path="res://computer.png" type="Texture" id=2]
+[ext_resource path="res://assets/grid_texture.png" type="Texture" id=1]
+[ext_resource path="res://assets/computer.png" type="Texture" id=2]
 [ext_resource path="res://computer_script.gd" type="Script" id=3]
 [ext_resource path="res://Grid.gd" type="Script" id=4]
 [ext_resource path="res://Label_Score.gd" type="Script" id=5]
 [ext_resource path="res://Label_Remaining_Tiles_Count.gd" type="Script" id=6]
+[ext_resource path="res://GUI.tscn" type="PackedScene" id=7]
+[ext_resource path="res://DarkOverlay.gd" type="Script" id=8]
 
 [sub_resource type="TileSet" id=3]
 0/name = "Background"
@@ -427,3 +429,14 @@ margin_right = 488.0
 margin_bottom = 590.0
 rect_scale = Vector2( 1.64, 1.64 )
 script = ExtResource( 6 )
+
+[node name="DarkOverlay" type="Polygon2D" parent="."]
+modulate = Color( 1, 1, 1, 0.490196 )
+color = Color( 0, 0, 0, 1 )
+invert_border = 0.1
+polygon = PoolVector2Array( -35, 7, -50, 501, -40, 603, 0, 625, 1038, 611, 1065, -43, -22, -88 )
+script = ExtResource( 8 )
+
+[node name="Control" parent="." instance=ExtResource( 7 )]
+anchor_top = 1.0
+margin_right = 0.0

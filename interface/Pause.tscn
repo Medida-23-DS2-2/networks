@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://interface/Pause.gd" type="Script" id=1]
+
+[node name="Pause" type="Control"]
+pause_mode = 2
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -512.0
+margin_bottom = -310.0
+script = ExtResource( 1 )
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+margin_right = 512.0
+margin_bottom = 30.0
+rect_min_size = Vector2( 20, 30 )
+split_offset = 50
+
+[node name="Button" type="Button" parent="HSplitContainer"]
+pause_mode = 2
+margin_right = 100.0
+margin_bottom = 30.0
+action_mode = 0
+text = "Pause"
+
+[node name="Button2" type="Button" parent="HSplitContainer"]
+margin_left = 112.0
+margin_right = 512.0
+margin_bottom = 30.0
+text = "Inventory"
+
+[connection signal="pressed" from="HSplitContainer/Button" to="." method="_on_pause_button_pressed"]
