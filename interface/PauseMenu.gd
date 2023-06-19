@@ -19,3 +19,8 @@ func _ready():
 func _on_ResumeButton_pressed():
 	get_tree().paused = false
 	queue_free()
+
+
+func _on_BackToMain_pressed():
+	get_tree().change_scene("res://interface/Title.tscn")
+	get_tree().paused = false
