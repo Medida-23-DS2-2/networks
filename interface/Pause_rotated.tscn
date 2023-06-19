@@ -6,11 +6,12 @@
 [ext_resource path="res://interface/styles/button_hover.tres" type="StyleBox" id=4]
 [ext_resource path="res://assets/Pause_Button.png" type="Texture" id=5]
 
-[node name="Pause" type="Control"]
+[node name="Pause_rotated" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_right = -512.0
 margin_bottom = -310.0
+rect_pivot_offset = Vector2( -266, -106 )
 script = ExtResource( 1 )
 
 [node name="HBoxContainer" type="HBoxContainer" parent="."]
@@ -18,8 +19,15 @@ margin_right = 40.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 512, 0 )
 
+[node name="Button2" type="Button" parent="HBoxContainer"]
+margin_right = 408.0
+margin_bottom = 40.0
+size_flags_horizontal = 3
+text = "Inventory"
+
 [node name="Button" type="Button" parent="HBoxContainer"]
-margin_right = 100.0
+margin_left = 412.0
+margin_right = 512.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 100, 0 )
 custom_styles/hover = ExtResource( 4 )
@@ -29,12 +37,5 @@ action_mode = 0
 text = "Pause"
 icon = ExtResource( 5 )
 expand_icon = true
-
-[node name="Button2" type="Button" parent="HBoxContainer"]
-margin_left = 104.0
-margin_right = 512.0
-margin_bottom = 40.0
-size_flags_horizontal = 3
-text = "Inventory"
 
 [connection signal="pressed" from="HBoxContainer/Button" to="." method="_on_pause_button_pressed"]

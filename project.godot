@@ -11,12 +11,17 @@ config_version=4
 [application]
 
 config/name="networks"
-run/main_scene="res://Node2D.tscn"
+run/main_scene="res://interface/Title.tscn"
 config/icon="res://assets/icon.png"
 
 [autoload]
 
 Global="*res://Global.gd"
+
+[display]
+
+window/size/width=1600
+window/size/height=900
 
 [global]
 

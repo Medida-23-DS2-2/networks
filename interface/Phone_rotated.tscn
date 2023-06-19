@@ -1,0 +1,23 @@
+[gd_scene format=2]
+
+[node name="Phone_rotated" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_right = -512.0
+margin_bottom = -300.0
+
+[node name="HSplitContainer" type="HSplitContainer" parent="."]
+margin_right = 512.0
+rect_min_size = Vector2( 0, 30 )
+split_offset = 50
+
+[node name="Button2" type="Button" parent="HSplitContainer"]
+margin_right = 102.0
+margin_bottom = 30.0
+text = "Phone"
+
+[node name="Button" type="Button" parent="HSplitContainer"]
+margin_left = 114.0
+margin_right = 512.0
+margin_bottom = 30.0
+text = "Inventory"
