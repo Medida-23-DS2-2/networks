@@ -85,4 +85,6 @@ action_mode = 0
 text = "Spiel Starten"
 
 [connection signal="pressed" from="VBoxContainer/StartButton2" to="." method="_on_StartButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/TutorialButton2" to="." method="_on_TutorialButton_pressed"]
+[connection signal="pressed" from="VBoxContainer/TutorialButton" to="." method="_on_TutorialButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/StartButton" to="." method="_on_StartButton_pressed"]
