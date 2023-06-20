@@ -22,11 +22,23 @@ anchor_bottom = 1.0
 rect_min_size = Vector2( 1090, 550 )
 alignment = 1
 
+[node name="BackToMain" type="Button" parent="VBoxContainer"]
+margin_left = 725.0
+margin_top = 324.0
+margin_right = 875.0
+margin_bottom = 384.0
+rect_min_size = Vector2( 150, 60 )
+size_flags_horizontal = 4
+custom_styles/hover = ExtResource( 2 )
+custom_styles/pressed = ExtResource( 3 )
+custom_styles/normal = ExtResource( 4 )
+text = "Back to Main"
+
 [node name="ResumeButton" type="Button" parent="VBoxContainer"]
 margin_left = 725.0
-margin_top = 356.0
+margin_top = 388.0
 margin_right = 875.0
-margin_bottom = 416.0
+margin_bottom = 448.0
 rect_min_size = Vector2( 150, 60 )
 size_flags_horizontal = 4
 custom_styles/hover = ExtResource( 2 )
@@ -38,9 +50,9 @@ expand_icon = true
 
 [node name="ResumeButton2" type="Button" parent="VBoxContainer"]
 margin_left = 725.0
-margin_top = 420.0
+margin_top = 452.0
 margin_right = 875.0
-margin_bottom = 480.0
+margin_bottom = 512.0
 rect_min_size = Vector2( 150, 60 )
 size_flags_horizontal = 4
 custom_styles/hover = ExtResource( 2 )
@@ -50,11 +62,11 @@ text = "Weiter"
 icon = ExtResource( 5 )
 expand_icon = true
 
-[node name="BackToMain" type="Button" parent="VBoxContainer"]
+[node name="BackToMain2" type="Button" parent="VBoxContainer"]
 margin_left = 725.0
-margin_top = 484.0
+margin_top = 516.0
 margin_right = 875.0
-margin_bottom = 544.0
+margin_bottom = 576.0
 rect_min_size = Vector2( 150, 60 )
 size_flags_horizontal = 4
 custom_styles/hover = ExtResource( 2 )
@@ -62,6 +74,7 @@ custom_styles/pressed = ExtResource( 3 )
 custom_styles/normal = ExtResource( 4 )
 text = "Back to Main"
 
+[connection signal="pressed" from="VBoxContainer/BackToMain" to="." method="_on_BackToMain_pressed"]
 [connection signal="pressed" from="VBoxContainer/ResumeButton" to="." method="_on_ResumeButton_pressed"]
 [connection signal="pressed" from="VBoxContainer/ResumeButton2" to="." method="_on_ResumeButton_pressed"]
-[connection signal="pressed" from="VBoxContainer/BackToMain" to="." method="_on_BackToMain_pressed"]
+[connection signal="pressed" from="VBoxContainer/BackToMain2" to="." method="_on_BackToMain_pressed"]

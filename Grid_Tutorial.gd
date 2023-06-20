@@ -9,9 +9,13 @@ var remaining_tiles = []
 var stage1_completed
 var stage2_completed
 
+onready var root = get_node("/root/Node2D")
+
 func _ready():
 	stage1_completed = false
 	stage2_completed = false
+	
+	Global.pen = true
 	
 	_init_remaining_tiles()
 	_init_stage1()
@@ -110,11 +114,11 @@ func _init_stage2():
 		remaining_tiles.remove(remaining_tiles.find(tile))
 
 func _physics_process(delta):
-	if(Input.is_action_pressed("mb_left")):
+	if(Input.is_action_pressed("mb_left") && Global.pen):
 		_select_tiles()
 	if(Input.is_action_just_released("mb_left")):
 		_cancel_selection()
-	if(Input.is_action_just_pressed("mb_right")):
+	if(Input.is_action_just_pressed("mb_left") && !Global.pen):
 		_delete_connection()
 
 func _select_tiles():
@@ -308,3 +312,6 @@ func _check_tutorial_checkpoints():
 	if (Global.score==12 && stage1_completed == true && stage2_completed == false):
 		stage2_completed = true
 		print("Stage 2 completed!")
+		var victory_screen = load("res://interface/Victory.tscn")
+		var victory_instance = victory_screen.instance()
+		root.add_child(victory_instance)

@@ -39,11 +39,11 @@ func _init_remaining_tiles():
 			remaining_tiles.append(Vector2(i,j))
 
 func _physics_process(delta):
-	if(Input.is_action_pressed("mb_left")):
+	if(Input.is_action_pressed("mb_left") && Global.pen):
 		_select_tiles()
 	if(Input.is_action_just_released("mb_left")):
 		_cancel_selection()
-	if(Input.is_action_just_pressed("mb_right")):
+	if(Input.is_action_just_pressed("mb_left") && !Global.pen):
 		_delete_connection()
 
 func _select_tiles():
@@ -247,3 +247,4 @@ func _get_random_pos():
 	
 func _update_score():
 	Global.score = connections.size()
+		

@@ -11,9 +11,13 @@ onready var root = get_node("/root/Node2D")
 func _ready():
 	pass
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-
+func _process(delta):
+	if(Global.pen):
+		$HBoxContainer/Eraser.DRAW_NORMAL
+	else:
+		$HBoxContainer/Pen.DRAW_NORMAL
+		$HBoxContainer/Eraser.DRAW_HOVER
 
 func _on_pause_button_pressed():
 	if (!get_tree().paused):
@@ -23,3 +27,11 @@ func _on_pause_button_pressed():
 		root.add_child(pause_instance)
 
 
+
+
+func _on_Pen_pressed():
+	Global.pen = true
+
+
+func _on_Eraser_pressed():
+	Global.pen = false
