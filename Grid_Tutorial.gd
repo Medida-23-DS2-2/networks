@@ -1,42 +1,113 @@
 extends TileMap
 
-var computer_timer
-var switch_timer
-var rng
-
 var connections = []
 var selected_tiles = []
 
 var switches = []
 var remaining_tiles = []
 
+var stage1_completed
+var stage2_completed
+
 func _ready():
-	rng = RandomNumberGenerator.new()
-	rng.randomize()
-	
-	computer_timer = Timer.new()
-	add_child(computer_timer)
-	computer_timer.connect("timeout", self,"_on_computer_Timer_timeout")
-	computer_timer.set_wait_time(5.0)
-	computer_timer.set_one_shot(false)
-	computer_timer.start()
-	
-	switch_timer = Timer.new()
-	add_child(switch_timer)
-	switch_timer.connect("timeout", self,"_on_switch_Timer_timeout")
-	switch_timer.set_wait_time(15.0)
-	switch_timer.set_one_shot(false)
-	switch_timer.start()
+	stage1_completed = false
+	stage2_completed = false
 	
 	_init_remaining_tiles()
-	
-	_on_computer_Timer_timeout()
-	_on_switch_Timer_timeout()
+	_init_stage1()
 
 func _init_remaining_tiles():
 	for i in 16:
 		for j in 9:
 			remaining_tiles.append(Vector2(i,j))
+
+func _init_stage1():
+	var tutorial_tiles = []
+	
+	#Tutorial Walls
+	for i in 9:
+		set_cellv(Vector2(7,i),1)
+		tutorial_tiles.append(Vector2(7,i))
+		set_cellv(Vector2(8,i),1)
+		tutorial_tiles.append(Vector2(8,i))
+	
+	for i in 16:
+		set_cellv(Vector2(i,3),1)
+		tutorial_tiles.append(Vector2(i,3))
+		set_cellv(Vector2(i,4),1)
+		tutorial_tiles.append(Vector2(i,4))
+		set_cellv(Vector2(i,5),1)
+		tutorial_tiles.append(Vector2(i,5))
+
+	
+	#Tutorial Computer
+	set_cellv(Vector2(5,2),8)
+	tutorial_tiles.append(Vector2(5,2))
+	
+	set_cellv(Vector2(10,2),8)
+	tutorial_tiles.append(Vector2(10,2))
+	
+	set_cellv(Vector2(5,6),8)
+	tutorial_tiles.append(Vector2(5,6))
+	
+	set_cellv(Vector2(10,6),8)
+	tutorial_tiles.append(Vector2(10,6))
+	
+	#Tutorial Router
+	set_cellv(Vector2(0,0),27)
+	tutorial_tiles.append(Vector2(0,0))
+	
+	set_cellv(Vector2(15,0),27)
+	tutorial_tiles.append(Vector2(15,0))
+	
+	set_cellv(Vector2(0,8),27)
+	tutorial_tiles.append(Vector2(0,8))
+	
+	set_cellv(Vector2(15,8),27)
+	tutorial_tiles.append(Vector2(15,8))
+	
+	for tile in tutorial_tiles:
+		remaining_tiles.remove(remaining_tiles.find(tile))
+
+func _init_stage2():
+	#Delete Walls
+	for i in 16:
+		if (i!=7&&i!=8):
+			set_cellv(Vector2(i,3),0)
+			remaining_tiles.append(Vector2(i,3))
+			set_cellv(Vector2(i,5),0)
+			remaining_tiles.append(Vector2(i,5))
+	
+	
+	var tutorial_tiles = []
+	
+	#Tutorial Computer 2
+	set_cellv(Vector2(5,3),8)
+	tutorial_tiles.append(Vector2(5,3))
+	set_cellv(Vector2(10,3),8)
+	tutorial_tiles.append(Vector2(10,3))
+	set_cellv(Vector2(5,5),8)
+	tutorial_tiles.append(Vector2(5,5))
+	set_cellv(Vector2(10,5),8)
+	tutorial_tiles.append(Vector2(10,5))
+	
+	
+	#Tutorial Switches
+	set_cellv(Vector2(1,3),10)
+	tutorial_tiles.append(Vector2(1,3))
+	switches.append([1,3,0,[0,0,0,0]])
+	set_cellv(Vector2(14,3),10)
+	tutorial_tiles.append(Vector2(14,3))
+	switches.append([14,3,0,[0,0,0,0]])
+	set_cellv(Vector2(1,5),10)
+	tutorial_tiles.append(Vector2(1,5))
+	switches.append([1,5,0,[0,0,0,0]])
+	set_cellv(Vector2(14,5),10)
+	tutorial_tiles.append(Vector2(14,5))
+	switches.append([14,5,0,[0,0,0,0]])
+	
+	for tile in tutorial_tiles:
+		remaining_tiles.remove(remaining_tiles.find(tile))
 
 func _physics_process(delta):
 	if(Input.is_action_pressed("mb_left")):
@@ -224,26 +295,16 @@ func _update_switch_sprites():
 			
 		if (ports==[1,1,1,1]):
 			set_cellv(tile, 26)
-
-func _on_computer_Timer_timeout():
-	var pos = _get_random_pos()
-	set_cellv(pos, 8)
-
-func _on_switch_Timer_timeout():
-	var pos = _get_random_pos()
-	set_cellv(pos, 10)
-	switches.append([pos[0],pos[1], 0, [0,0,0,0]])
-
-func _get_random_pos():
-	if (remaining_tiles.empty()):
-		print("finish")
-		return Vector2(0,0)
-	else:
-		var random = rng.randi_range(0,remaining_tiles.size()-1)
-		var rngPos = remaining_tiles[random]
-		remaining_tiles.remove(random)
-		Global.remaining_tiles_count = remaining_tiles.size()
-		return rngPos
 	
 func _update_score():
 	Global.score = connections.size()
+	_check_tutorial_checkpoints()
+
+func _check_tutorial_checkpoints():
+	if (Global.score==4 && stage1_completed == false):
+		stage1_completed = true
+		print("Stage 1 completed!")
+		_init_stage2()
+	if (Global.score==12 && stage1_completed == true && stage2_completed == false):
+		stage2_completed = true
+		print("Stage 2 completed!")
