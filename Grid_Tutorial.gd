@@ -212,7 +212,7 @@ func _delete_connection():
 					set_cellv(rtile,8)
 				if (cellv==28): #Router
 					set_cellv(rtile,27)
-				if (cellv>=10&&cellv<=25): #Switch
+				if (cellv>=10&&cellv<=26): #Switch
 					for switch in switches:
 						if (rtile == Vector2(switch[0],switch[1])):
 							var ports = switch[3]
