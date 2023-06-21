@@ -11,19 +11,45 @@ var stage2_completed
 
 onready var root = get_node("/root/Node2D")
 
+var dialogue_data = []
+
+enum GameState { DIALOGUE, GAMEPLAY }
+var currentState = GameState.DIALOGUE
+
+var pen_tl
+var pen_tr
+var pen_bl
+var pen_br
+
 func _ready():
 	stage1_completed = false
 	stage2_completed = false
 	
 	Global.pen = true
 	
+	pen_tl = true
+	pen_tr = true
+	pen_bl = true
+	pen_br = true
+	
+	dialogue_data = load_dialogue()
+	
 	_init_remaining_tiles()
 	_init_stage1()
+
+func _process(_delta):
+	if currentState == GameState.DIALOGUE:
+		# get_tree().paused = true
+		pass
+	elif currentState == GameState.GAMEPLAY:
+		# get_tree().paused = false
+		pass
 
 func _init_remaining_tiles():
 	for i in 16:
 		for j in 9:
 			remaining_tiles.append(Vector2(i,j))
+	_init_stage1()
 
 func _init_stage1():
 	var tutorial_tiles = []
@@ -57,6 +83,13 @@ func _init_stage1():
 	set_cellv(Vector2(10,6),8)
 	tutorial_tiles.append(Vector2(10,6))
 	
+	# dialog: das ist ein PC
+	print("dialogue about to be added...")
+	if Global.progress_count == 0:
+		play_dialogue(Global.progress_count)
+		currentState = GameState.DIALOGUE
+	print("dialogue should have been added by now")
+	
 	#Tutorial Router
 	set_cellv(Vector2(0,0),27)
 	tutorial_tiles.append(Vector2(0,0))
@@ -70,8 +103,14 @@ func _init_stage1():
 	set_cellv(Vector2(15,8),27)
 	tutorial_tiles.append(Vector2(15,8))
 	
+	# dialog: PC muss an Router angeschlossen werden
+	if Global.progress_count == 1:
+		play_dialogue(1)
+	
 	for tile in tutorial_tiles:
 		remaining_tiles.remove(remaining_tiles.find(tile))
+	
+	
 
 func _init_stage2():
 	#Delete Walls
@@ -95,6 +134,9 @@ func _init_stage2():
 	set_cellv(Vector2(10,5),8)
 	tutorial_tiles.append(Vector2(10,5))
 	
+	# dialog: PC nur 1 Port
+	if Global.progress_count == 3:
+		play_dialogue(3)
 	
 	#Tutorial Switches
 	set_cellv(Vector2(1,3),10)
@@ -110,10 +152,14 @@ func _init_stage2():
 	tutorial_tiles.append(Vector2(14,5))
 	switches.append([14,5,0,[0,0,0,0]])
 	
+	# dialog: switches
+	if Global.progress_count == 4:
+		play_dialogue(4)
+	
 	for tile in tutorial_tiles:
 		remaining_tiles.remove(remaining_tiles.find(tile))
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	if(Input.is_action_pressed("mb_left") && Global.pen):
 		_select_tiles()
 	if(Input.is_action_just_released("mb_left")):
@@ -307,11 +353,39 @@ func _update_score():
 func _check_tutorial_checkpoints():
 	if (Global.score==4 && stage1_completed == false):
 		stage1_completed = true
+		
 		print("Stage 1 completed!")
+		if Global.progress_count == 2:
+			play_dialogue(2) # works
+		
+		
 		_init_stage2()
+	
+	if (Global.score==4 && stage1_completed == true && stage2_completed == false):
+		if Global.progress_count == 6:
+			play_dialogue(6)
+		
 	if (Global.score==12 && stage1_completed == true && stage2_completed == false):
 		stage2_completed = true
+		
 		print("Stage 2 completed!")
+		if Global.progress_count == 7:
+			play_dialogue(7)
+		
 		var victory_screen = load("res://interface/Victory.tscn")
 		var victory_instance = victory_screen.instance()
 		root.add_child(victory_instance)
+
+func load_dialogue():
+	var file = File.new()
+	file.open("res://interface/dialogue/dialog-data.json", file.READ)
+	return parse_json(file.get_as_text())
+
+func play_dialogue(input):
+	var dialogue = load("res://interface/dialogue/Dialog.tscn").instance()
+	get_tree().get_root().add_child(dialogue)
+	dialogue.connect("dialogueNodeDeleted", self, "_on_DialogueNodeDeleted")
+	dialogue.update_text(dialogue_data[input]["text"])
+
+func _on_DialogueNodeDeleted():
+	currentState = GameState.GAMEPLAY

@@ -1,0 +1,26 @@
+[
+    {
+        "text": "Um Daten aus dem Internet ziehen zu können, braucht ein PC eine möglichst stabile Verbindung. Die stabilste Verbindung kann über Ethernet-Kabel geschaffen werden."
+    },
+    {
+        "text": "Internet kommt nicht einfach aus der Steckdose. Also benötigen wir einen Router, der an einen Internet-Provider angeschlossen ist, von dem aus wir einen Zugang ins Internet erhalten können. Mit diesem Router können wir unseren PC jetzt verbinden."
+    },
+    {
+        "text": "Super! Jetzt können Daten aus dem Internet gezogen werden."
+    },
+    {
+        "text": "Router haben hier nur einen Steckplatz. Wenn du mehr als einen PC anschließen möchtest, brauchst du also eine Verteilerstelle."
+    },
+    {
+        "text": "So einen Verteiler nennt man Switch. An einen Switch können hier bis zu vier PCs angeschlossen werden."
+    },
+    {
+        "text": "Verbinde jetzt den Switch mit dem Router."
+    },
+    {
+        "text": "Jetzt kannst du die beiden PCs an den Switch anschließen und somit eine stabile Verbindung aufbauen."
+    },
+    {
+        "text": "Perfekt! Ich sehe, du hast die Grundlagen verstanden. Lass uns jetzt mit dem Hauptspiel beginnen!"
+    }
+]

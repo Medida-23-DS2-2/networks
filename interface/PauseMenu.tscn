@@ -32,7 +32,7 @@ size_flags_horizontal = 4
 custom_styles/hover = ExtResource( 2 )
 custom_styles/pressed = ExtResource( 3 )
 custom_styles/normal = ExtResource( 4 )
-text = "Back to Main"
+text = "Zurück zum Titel"
 
 [node name="ResumeButton" type="Button" parent="VBoxContainer"]
 margin_left = 725.0
@@ -72,7 +72,7 @@ size_flags_horizontal = 4
 custom_styles/hover = ExtResource( 2 )
 custom_styles/pressed = ExtResource( 3 )
 custom_styles/normal = ExtResource( 4 )
-text = "Back to Main"
+text = "Zurück zum Titel"
 
 [connection signal="pressed" from="VBoxContainer/BackToMain" to="." method="_on_BackToMain_pressed"]
 [connection signal="pressed" from="VBoxContainer/ResumeButton" to="." method="_on_ResumeButton_pressed"]
