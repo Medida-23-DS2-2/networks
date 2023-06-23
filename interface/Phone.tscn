@@ -43,17 +43,14 @@ margin_bottom = 40.0
 size_flags_horizontal = 3
 text = "Inventory"
 
-[node name="Button2" type="Button" parent="HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
 margin_left = 432.0
 margin_right = 512.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 80, 40 )
-custom_styles/hover = ExtResource( 2 )
-custom_styles/pressed = ExtResource( 4 )
-custom_styles/normal = ExtResource( 3 )
-text = "Phone"
-icon = ExtResource( 1 )
-expand_icon = true
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 6
 
 [connection signal="pressed" from="HBoxContainer/Pen" to="." method="_on_Pen_pressed"]
 [connection signal="pressed" from="HBoxContainer/Eraser" to="." method="_on_Eraser_pressed"]

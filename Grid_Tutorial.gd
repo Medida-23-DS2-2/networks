@@ -12,9 +12,7 @@ var stage2_completed
 onready var root = get_node("/root/Node2D")
 
 var dialogue_data = []
-
-enum GameState { DIALOGUE, GAMEPLAY }
-var currentState = GameState.DIALOGUE
+var dialogue = null
 
 var pen_tl
 var pen_tr
@@ -38,12 +36,7 @@ func _ready():
 	_init_stage1()
 
 func _process(_delta):
-	if currentState == GameState.DIALOGUE:
-		# get_tree().paused = true
-		pass
-	elif currentState == GameState.GAMEPLAY:
-		# get_tree().paused = false
-		pass
+	pass
 
 func _init_remaining_tiles():
 	for i in 16:
@@ -84,11 +77,9 @@ func _init_stage1():
 	tutorial_tiles.append(Vector2(10,6))
 	
 	# dialog: das ist ein PC
-	print("dialogue about to be added...")
 	if Global.progress_count == 0:
 		play_dialogue(Global.progress_count)
-		currentState = GameState.DIALOGUE
-	print("dialogue should have been added by now")
+		yield(dialogue, "dialogueNodeDeleted")
 	
 	#Tutorial Router
 	set_cellv(Vector2(0,0),27)
@@ -106,10 +97,14 @@ func _init_stage1():
 	# dialog: PC muss an Router angeschlossen werden
 	if Global.progress_count == 1:
 		play_dialogue(1)
+		yield(dialogue, "dialogueNodeDeleted")
 	
 	for tile in tutorial_tiles:
 		remaining_tiles.remove(remaining_tiles.find(tile))
 	
+	if Global.progress_count == 2:
+		play_dialogue(2)
+		yield(dialogue, "dialogueNodeDeleted")
 	
 
 func _init_stage2():
@@ -135,8 +130,9 @@ func _init_stage2():
 	tutorial_tiles.append(Vector2(10,5))
 	
 	# dialog: PC nur 1 Port
-	if Global.progress_count == 3:
-		play_dialogue(3)
+	if Global.progress_count == 4:
+		play_dialogue(4)
+		yield(dialogue, "dialogueNodeDeleted")
 	
 	#Tutorial Switches
 	set_cellv(Vector2(1,3),10)
@@ -153,11 +149,16 @@ func _init_stage2():
 	switches.append([14,5,0,[0,0,0,0]])
 	
 	# dialog: switches
-	if Global.progress_count == 4:
-		play_dialogue(4)
+	if Global.progress_count == 5:
+		play_dialogue(5)
+		yield(dialogue, "dialogueNodeDeleted")
 	
 	for tile in tutorial_tiles:
 		remaining_tiles.remove(remaining_tiles.find(tile))
+		
+	if Global.progress_count == 6:
+		play_dialogue(6)
+		yield(dialogue, "dialogueNodeDeleted")
 
 func _physics_process(_delta):
 	if(Input.is_action_pressed("mb_left") && Global.pen):
@@ -185,6 +186,19 @@ func _select_tiles():
 			if (_check_start_end_tile(get_cellv(tile))): #End
 				selected_tiles.append(tile)
 				_finish_selection()
+
+func _select_tiles_multitouch():
+	if pen_tl:
+		_select_tiles()
+	
+	if pen_tr:
+		_select_tiles()
+	
+	if pen_bl:
+		_select_tiles()
+	
+	if pen_br:
+		_select_tiles()
 
 func _check_start_end_tile(cellv):
 	if (cellv==8||(cellv>=10&&cellv<=25)||cellv==27):
@@ -355,22 +369,25 @@ func _check_tutorial_checkpoints():
 		stage1_completed = true
 		
 		print("Stage 1 completed!")
-		if Global.progress_count == 2:
-			play_dialogue(2) # works
+		if Global.progress_count == 3:
+			play_dialogue(3) # works
+			yield(dialogue, "dialogueNodeDeleted")
 		
 		
 		_init_stage2()
 	
 	if (Global.score==4 && stage1_completed == true && stage2_completed == false):
-		if Global.progress_count == 6:
-			play_dialogue(6)
+		if Global.progress_count == 7:
+			play_dialogue(7)
+			yield(dialogue, "dialogueNodeDeleted")
 		
 	if (Global.score==12 && stage1_completed == true && stage2_completed == false):
 		stage2_completed = true
 		
 		print("Stage 2 completed!")
-		if Global.progress_count == 7:
-			play_dialogue(7)
+		if Global.progress_count == 8:
+			play_dialogue(8)
+			yield(dialogue, "dialogueNodeDeleted")
 		
 		var victory_screen = load("res://interface/Victory.tscn")
 		var victory_instance = victory_screen.instance()
@@ -382,10 +399,11 @@ func load_dialogue():
 	return parse_json(file.get_as_text())
 
 func play_dialogue(input):
-	var dialogue = load("res://interface/dialogue/Dialog.tscn").instance()
-	get_tree().get_root().add_child(dialogue)
+	dialogue = load("res://interface/dialogue/Dialog.tscn").instance()
+	add_child(dialogue)
 	dialogue.connect("dialogueNodeDeleted", self, "_on_DialogueNodeDeleted")
 	dialogue.update_text(dialogue_data[input]["text"])
+	yield(dialogue, "dialogueNodeDeleted")
 
 func _on_DialogueNodeDeleted():
-	currentState = GameState.GAMEPLAY
+	pass

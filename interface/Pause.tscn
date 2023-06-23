@@ -18,20 +18,16 @@ margin_right = 40.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 512, 0 )
 
-[node name="Button" type="Button" parent="HBoxContainer"]
-margin_right = 100.0
+[node name="TextureButton" type="TextureButton" parent="HBoxContainer"]
+margin_right = 40.0
 margin_bottom = 40.0
-rect_min_size = Vector2( 100, 0 )
-custom_styles/hover = ExtResource( 4 )
-custom_styles/pressed = ExtResource( 3 )
-custom_styles/normal = ExtResource( 2 )
-action_mode = 0
-text = "Pause"
-icon = ExtResource( 5 )
-expand_icon = true
+rect_min_size = Vector2( 40, 40 )
+texture_normal = ExtResource( 5 )
+expand = true
+stretch_mode = 5
 
 [node name="Button2" type="Button" parent="HBoxContainer"]
-margin_left = 104.0
+margin_left = 44.0
 margin_right = 365.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
@@ -56,6 +52,6 @@ custom_styles/pressed = ExtResource( 3 )
 custom_styles/normal = ExtResource( 2 )
 text = "Eraser"
 
-[connection signal="pressed" from="HBoxContainer/Button" to="." method="_on_pause_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/TextureButton" to="." method="_on_pause_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/Pen" to="." method="_on_Pen_pressed"]
 [connection signal="pressed" from="HBoxContainer/Eraser" to="." method="_on_Eraser_pressed"]
