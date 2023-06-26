@@ -33,7 +33,6 @@ func _ready():
 	dialogue_data = load_dialogue()
 	
 	_init_remaining_tiles()
-	_init_stage1()
 
 func _process(_delta):
 	pass
@@ -61,7 +60,6 @@ func _init_stage1():
 		tutorial_tiles.append(Vector2(i,4))
 		set_cellv(Vector2(i,5),1)
 		tutorial_tiles.append(Vector2(i,5))
-
 	
 	#Tutorial Computer
 	set_cellv(Vector2(5,2),8)
@@ -77,6 +75,7 @@ func _init_stage1():
 	tutorial_tiles.append(Vector2(10,6))
 	
 	# dialog: das ist ein PC
+	# wird iwie 2x instanziiert?
 	if Global.progress_count == 0:
 		play_dialogue(Global.progress_count)
 		yield(dialogue, "dialogueNodeDeleted")
