@@ -1,10 +1,13 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://interface/Pause.gd" type="Script" id=1]
 [ext_resource path="res://interface/styles/button_normal.tres" type="StyleBox" id=2]
 [ext_resource path="res://interface/styles/button_pressed.tres" type="StyleBox" id=3]
 [ext_resource path="res://interface/styles/button_hover.tres" type="StyleBox" id=4]
 [ext_resource path="res://assets/Pause_Button.png" type="Texture" id=5]
+[ext_resource path="res://assets/pen_pressed.png" type="Texture" id=6]
+[ext_resource path="res://assets/pen.png" type="Texture" id=7]
+[ext_resource path="res://assets/Pause_pressed.png" type="Texture" id=8]
 
 [node name="Pause" type="Control"]
 anchor_right = 1.0
@@ -18,11 +21,12 @@ margin_right = 40.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 512, 0 )
 
-[node name="TextureButton" type="TextureButton" parent="HBoxContainer"]
+[node name="Button" type="TextureButton" parent="HBoxContainer"]
 margin_right = 40.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 40, 40 )
 texture_normal = ExtResource( 5 )
+texture_pressed = ExtResource( 8 )
 expand = true
 stretch_mode = 5
 
@@ -33,15 +37,12 @@ margin_bottom = 40.0
 size_flags_horizontal = 3
 text = "Inventory"
 
-[node name="Pen" type="Button" parent="HBoxContainer"]
+[node name="Pen" type="TextureButton" parent="HBoxContainer"]
 margin_left = 369.0
 margin_right = 469.0
 margin_bottom = 40.0
-rect_min_size = Vector2( 100, 0 )
-custom_styles/hover = ExtResource( 4 )
-custom_styles/pressed = ExtResource( 3 )
-custom_styles/normal = ExtResource( 2 )
-text = "Pen"
+texture_normal = ExtResource( 7 )
+texture_pressed = ExtResource( 6 )
 
 [node name="Eraser" type="Button" parent="HBoxContainer"]
 margin_left = 473.0
@@ -52,6 +53,6 @@ custom_styles/pressed = ExtResource( 3 )
 custom_styles/normal = ExtResource( 2 )
 text = "Eraser"
 
-[connection signal="pressed" from="HBoxContainer/TextureButton" to="." method="_on_pause_button_pressed"]
+[connection signal="pressed" from="HBoxContainer/Button" to="." method="_on_pause_button_pressed"]
 [connection signal="pressed" from="HBoxContainer/Pen" to="." method="_on_Pen_pressed"]
 [connection signal="pressed" from="HBoxContainer/Eraser" to="." method="_on_Eraser_pressed"]
