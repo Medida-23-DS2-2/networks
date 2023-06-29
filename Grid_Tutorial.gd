@@ -6,6 +6,9 @@ var selected_tiles = []
 var switches = []
 var remaining_tiles = []
 
+var last_frame_pointers = []
+var selected_tiles_by_pointer = {}
+
 var stage1_completed
 var stage2_completed
 
@@ -18,6 +21,10 @@ var pen_tl
 var pen_tr
 var pen_bl
 var pen_br
+
+func transformToLocalPosition(globalPosition: Vector2):
+	var globalOrigin = get_global_transform_with_canvas().get_origin()
+	return (globalPosition - globalOrigin)
 
 func _ready():
 	stage1_completed = false
@@ -160,44 +167,45 @@ func _init_stage2():
 		yield(dialogue, "dialogueNodeDeleted")
 
 func _physics_process(_delta):
-	if(Input.is_action_pressed("mb_left") && Global.pen):
-		_select_tiles()
-	if(Input.is_action_just_released("mb_left")):
-		_cancel_selection()
-	if(Input.is_action_just_pressed("mb_left") && !Global.pen):
-		_delete_connection()
+	var touch_helper = get_node("/root/TouchHelper")
+	for ptr_index in touch_helper.state.keys():
+		var pos = touch_helper.state[ptr_index]
+		
+		if last_frame_pointers.has(ptr_index):			
+			# equal to mouse_down	
+			if (Global.pen):
+				_select_tiles(pos, ptr_index)
+			else:
+				_delete_connection(pos)
+		else:
+			# equal to mouse_up
+			_cancel_selection(ptr_index)
 
-func _select_tiles():
-	var tile: Vector2 = world_to_map(get_global_mouse_position())
-	if (!selected_tiles.has(tile)):
-		if (selected_tiles.empty()): 
+	last_frame_pointers = touch_helper.state.keys()
+	
+
+func _select_tiles(globalPosition: Vector2, pointer: int):
+	var tile: Vector2 = world_to_map(transformToLocalPosition(globalPosition))
+	# print(tile)
+	if (!selected_tiles_by_pointer.has(pointer)):
+		selected_tiles_by_pointer[pointer] = []
+
+	if (!selected_tiles_by_pointer[pointer].has(tile)):
+		if (selected_tiles_by_pointer[pointer].empty()): 
 			if (_check_start_end_tile(get_cellv(tile))): #Start
-				selected_tiles.append(tile)
+				selected_tiles_by_pointer[pointer].append(tile)
 		else:
 			if (get_cellv(tile)==0): #NextTileToSelection
-				var last = selected_tiles[selected_tiles.size()-1]
+				var last = selected_tiles_by_pointer[pointer][selected_tiles_by_pointer[pointer].size()-1]
 				var diff = tile-last
 				if (diff==Vector2(1,0)||diff==Vector2(-1,0)||diff==Vector2(0,1)||diff==Vector2(0,-1)):
-					selected_tiles.append(tile)
+					selected_tiles_by_pointer[pointer].append(tile)
 					set_cellv(tile, 1)
 				else:
-					_cancel_selection()
+					_cancel_selection(pointer)
 			if (_check_start_end_tile(get_cellv(tile))): #End
-				selected_tiles.append(tile)
-				_finish_selection()
-
-func _select_tiles_multitouch():
-	if pen_tl:
-		_select_tiles()
-	
-	if pen_tr:
-		_select_tiles()
-	
-	if pen_bl:
-		_select_tiles()
-	
-	if pen_br:
-		_select_tiles()
+				selected_tiles_by_pointer[pointer].append(tile)
+				_finish_selection(pointer)
 
 func _check_start_end_tile(cellv):
 	if (cellv==8||(cellv>=10&&cellv<=25)||cellv==27):
@@ -205,8 +213,8 @@ func _check_start_end_tile(cellv):
 	else:
 		return false;
 
-func _delete_connection():
-	var tile: Vector2 = world_to_map(get_global_mouse_position())
+func _delete_connection(globalPosition: Vector2):
+	var tile: Vector2 = world_to_map(transformToLocalPosition(globalPosition))
 	if (get_cellv(tile)>=2&&get_cellv(tile)<=9):
 		var cable_index = -1
 		for i in connections.size():
@@ -246,36 +254,42 @@ func _delete_connection():
 			connections.remove(cable_index)
 			_update_score()
 
-func _cancel_selection():
-	for i in selected_tiles.size():
-		if (get_cellv(selected_tiles[i])==1):
-			set_cellv(selected_tiles[i], 0)
-	selected_tiles.clear()
+func _cancel_selection(pointer: int):
+	if (!selected_tiles_by_pointer.has(pointer)):
+		return
+	for i in selected_tiles_by_pointer[pointer].size():
+		if (!selected_tiles_by_pointer[pointer] || !selected_tiles_by_pointer[pointer][i]): 
+			continue
+		if (get_cellv(selected_tiles_by_pointer[pointer][i])==1):
+			set_cellv(selected_tiles_by_pointer[pointer][i], 0)
+			selected_tiles_by_pointer[pointer].clear()
 
-func _finish_selection():
-	if(!selected_tiles.empty()):
-		var start = selected_tiles[0]
-		var end = selected_tiles[selected_tiles.size()-1]
+func _finish_selection(pointer):
+	if (!selected_tiles_by_pointer.has(pointer)):
+		selected_tiles_by_pointer[pointer] = []
+
+	if(!selected_tiles_by_pointer[pointer].empty()):
+		var start = selected_tiles_by_pointer[pointer][0]
+		var end = selected_tiles_by_pointer[pointer][selected_tiles_by_pointer[pointer].size()-1]
 		if (_check_start_end_tile(get_cellv(start))&&_check_start_end_tile(get_cellv(end))):
-			for i in selected_tiles.size():
-				remaining_tiles.remove(remaining_tiles.find(selected_tiles[i]))
+			for i in selected_tiles_by_pointer[pointer].size():
+				remaining_tiles.remove(remaining_tiles.find(selected_tiles_by_pointer[pointer][i]))
 				Global.remaining_tiles_count = remaining_tiles.size()
-				if (i==0 || i==selected_tiles.size()-1):
-					if (get_cellv(selected_tiles[i])==8): #Computer
-						set_cellv(selected_tiles[i],9)
-					if (get_cellv(selected_tiles[i])==27): #Router
-						set_cellv(selected_tiles[i],28)
-					if (get_cellv(selected_tiles[i])>=10&&get_cellv(selected_tiles[i])<=25): #Switches
-						var tile = selected_tiles[i]
+				if (i==0 || i==selected_tiles_by_pointer[pointer].size()-1):
+					if (get_cellv(selected_tiles_by_pointer[pointer][i])==8): #Computer
+						set_cellv(selected_tiles_by_pointer[pointer][i],9)
+					if (get_cellv(selected_tiles_by_pointer[pointer][i])==27): #Router
+						set_cellv(selected_tiles_by_pointer[pointer][i],28)
+					if (get_cellv(selected_tiles_by_pointer[pointer][i])>=10&&get_cellv(selected_tiles_by_pointer[pointer][i])<=25): #Switches
+						var tile = selected_tiles_by_pointer[pointer][i]
 						for switch in switches:
 							if (Vector2(switch[0],switch[1])==tile):
 								var ports = switch[3]
 								var diff=Vector2(0,0);
 								if (i==0):
-									diff = tile-selected_tiles[1]
-								if (i==selected_tiles.size()-1):
-									diff = tile-selected_tiles[i-1]
-								print(diff);
+									diff = tile-selected_tiles_by_pointer[pointer][1]
+								if (i==selected_tiles_by_pointer[pointer].size()-1):
+									diff = tile-selected_tiles_by_pointer[pointer][i-1]
 								if(diff==Vector2(0,1)): #North port
 									ports[0] = 1
 								if(diff==Vector2(-1,0)): #East
@@ -285,38 +299,38 @@ func _finish_selection():
 								if(diff==Vector2(1,0)): #West
 									ports[3] = 1
 								_update_switch_sprites()
-				if (i!=0 && i!=selected_tiles.size()-1):
-					var dir =  selected_tiles[i]-selected_tiles[i-1]
-					var diff = selected_tiles[i+1]-selected_tiles[i-1]
+				if (i!=0 && i!=selected_tiles_by_pointer[pointer].size()-1):
+					var dir =  selected_tiles_by_pointer[pointer][i]-selected_tiles_by_pointer[pointer][i-1]
+					var diff = selected_tiles_by_pointer[pointer][i+1]-selected_tiles_by_pointer[pointer][i-1]
 					if (diff==Vector2(2,0)||diff==Vector2(-2,0)):
-						set_cellv(selected_tiles[i], 2)
+						set_cellv(selected_tiles_by_pointer[pointer][i], 2)
 					if (diff==Vector2(0,2)||diff==Vector2(0,-2)):
-						set_cellv(selected_tiles[i], 3)
+						set_cellv(selected_tiles_by_pointer[pointer][i], 3)
 					if (dir==Vector2(1,0)): #East
 						if (diff==Vector2(1,1)):
-							set_cellv(selected_tiles[i], 6)	
+							set_cellv(selected_tiles_by_pointer[pointer][i], 6)	
 						if (diff==Vector2(1,-1)):
-							set_cellv(selected_tiles[i], 5)
+							set_cellv(selected_tiles_by_pointer[pointer][i], 5)
 					if (dir==Vector2(-1,0)): #West
 						if (diff==Vector2(-1,1)):
-							set_cellv(selected_tiles[i], 7)	
+							set_cellv(selected_tiles_by_pointer[pointer][i], 7)	
 						if (diff==Vector2(-1,-1)):
-							set_cellv(selected_tiles[i], 4)
+							set_cellv(selected_tiles_by_pointer[pointer][i], 4)
 					if (dir==Vector2(0,1)): #South
 						if (diff==Vector2(1,1)):
-							set_cellv(selected_tiles[i], 4)	
+							set_cellv(selected_tiles_by_pointer[pointer][i], 4)	
 						if (diff==Vector2(-1,1)):
-							set_cellv(selected_tiles[i], 5)
+							set_cellv(selected_tiles_by_pointer[pointer][i], 5)
 					if (dir==Vector2(0,-1)): #North
 						if (diff==Vector2(1,-1)):
-							set_cellv(selected_tiles[i], 7)	
+							set_cellv(selected_tiles_by_pointer[pointer][i], 7)	
 						if (diff==Vector2(-1,-1)):
-							set_cellv(selected_tiles[i], 6)
-			connections.append(selected_tiles.duplicate())
+							set_cellv(selected_tiles_by_pointer[pointer][i], 6)
+			connections.append(selected_tiles_by_pointer[pointer].duplicate())
 			_update_score()
-			selected_tiles.clear()
+			selected_tiles_by_pointer[pointer].clear()
 		else:
-			_cancel_selection()
+			_cancel_selection(pointer)
 
 func _update_switch_sprites():
 	for switch in switches:
