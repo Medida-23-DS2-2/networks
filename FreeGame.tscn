@@ -395,8 +395,8 @@ extents = Vector2( 32, 32 )
 [node name="Node2D" type="Node2D"]
 
 [node name="ColorRect" type="ColorRect" parent="."]
-margin_left = -264.0
-margin_top = -184.0
+margin_left = -648.0
+margin_top = -440.0
 margin_right = 1648.0
 margin_bottom = 992.0
 color = Color( 0.917647, 0.796078, 0.533333, 1 )
@@ -408,7 +408,7 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 
 [node name="Camera2D" type="Camera2D" parent="GridContainer"]
-position = Vector2( -248, -160 )
+position = Vector2( -424, -224 )
 anchor_mode = 0
 current = true
 
@@ -456,6 +456,7 @@ polygon = PoolVector2Array( -296, 784, 1416, 808, 1480, -208, -304, -192 )
 script = ExtResource( 4 )
 
 [node name="Control" parent="." instance=ExtResource( 8 )]
+margin_left = -552.0
 margin_top = -64.0
 margin_right = 1571.0
 margin_bottom = 720.0

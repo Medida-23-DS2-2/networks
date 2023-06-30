@@ -8,10 +8,10 @@ pause_mode = 2
 script = ExtResource( 2 )
 
 [node name="NinePatchRect" type="NinePatchRect" parent="."]
-margin_left = 457.0
-margin_top = 656.0
-margin_right = 1223.0
-margin_bottom = 851.0
+margin_left = 585.0
+margin_top = 760.0
+margin_right = 1351.0
+margin_bottom = 955.0
 texture = ExtResource( 1 )
 patch_margin_left = 66
 patch_margin_top = 25
@@ -36,10 +36,10 @@ margin_right = 728.0
 margin_bottom = 170.0
 
 [node name="NinePatchRect2" type="NinePatchRect" parent="."]
-margin_left = 1190.0
-margin_top = 200.0
-margin_right = 1956.0
-margin_bottom = 395.0
+margin_left = 1318.0
+margin_top = 304.0
+margin_right = 2084.0
+margin_bottom = 499.0
 rect_rotation = 180.0
 texture = ExtResource( 1 )
 patch_margin_left = 66

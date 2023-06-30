@@ -4,48 +4,45 @@
 [ext_resource path="res://interface/styles/button_pressed.tres" type="StyleBox" id=2]
 [ext_resource path="res://interface/styles/button_hover.tres" type="StyleBox" id=3]
 [ext_resource path="res://interface/Victory.gd" type="Script" id=4]
-
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.996094, 0.964571, 0.758743, 1 )
-border_width_left = 8
-border_width_top = 4
-border_width_right = 8
-border_width_bottom = 4
-border_color = Color( 0.741176, 0.407843, 0.25098, 1 )
-corner_radius_top_left = 5
-corner_radius_top_right = 5
-corner_radius_bottom_right = 5
-corner_radius_bottom_left = 5
+[ext_resource path="res://assets/Victory_Screen.png" type="Texture" id=5]
 
 [node name="Control" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 script = ExtResource( 4 )
 
-[node name="Panel" type="Panel" parent="."]
-margin_left = 84.0
-margin_top = 44.0
-margin_right = 884.0
-margin_bottom = 594.0
-custom_styles/panel = SubResource( 1 )
-
-[node name="Label" type="Label" parent="."]
-margin_left = 444.0
-margin_top = 298.0
-margin_right = 536.0
-margin_bottom = 312.0
-custom_colors/font_color = Color( 0.298039, 0.145098, 0.105882, 1 )
-text = "Glückwunsch!!"
+[node name="TextureRect" type="TextureRect" parent="."]
+margin_left = -1.0
+margin_top = 49.0
+margin_right = 948.0
+margin_bottom = 585.0
+texture = ExtResource( 5 )
+expand = true
+stretch_mode = 6
 
 [node name="BackToMain" type="Button" parent="."]
-margin_left = 419.0
-margin_top = 340.0
-margin_right = 559.0
-margin_bottom = 380.0
+margin_left = 402.0
+margin_top = 512.0
+margin_right = 542.0
+margin_bottom = 552.0
 rect_min_size = Vector2( 140, 40 )
+rect_pivot_offset = Vector2( 58, 29 )
+custom_styles/hover = ExtResource( 3 )
+custom_styles/pressed = ExtResource( 2 )
+custom_styles/normal = ExtResource( 1 )
+text = "Back to Main"
+
+[node name="BackToMain2" type="Button" parent="."]
+margin_left = 403.0
+margin_top = 70.0
+margin_right = 543.0
+margin_bottom = 110.0
+rect_min_size = Vector2( 140, 40 )
+rect_pivot_offset = Vector2( 58, 29 )
 custom_styles/hover = ExtResource( 3 )
 custom_styles/pressed = ExtResource( 2 )
 custom_styles/normal = ExtResource( 1 )
 text = "Back to Main"
 
 [connection signal="pressed" from="BackToMain" to="." method="_on_BackToMain_pressed"]
+[connection signal="pressed" from="BackToMain2" to="." method="_on_BackToMain_pressed"]
