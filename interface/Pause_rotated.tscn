@@ -1,9 +1,8 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://interface/Pause.gd" type="Script" id=1]
-[ext_resource path="res://interface/styles/button_normal.tres" type="StyleBox" id=2]
-[ext_resource path="res://interface/styles/button_pressed.tres" type="StyleBox" id=3]
-[ext_resource path="res://interface/styles/button_hover.tres" type="StyleBox" id=4]
+[ext_resource path="res://assets/eraser_mirrored_pressed.png" type="Texture" id=2]
+[ext_resource path="res://assets/eraser_mirrored.png" type="Texture" id=3]
 [ext_resource path="res://assets/Pause_Button.png" type="Texture" id=5]
 [ext_resource path="res://assets/pen_pressed_mirror.png" type="Texture" id=6]
 [ext_resource path="res://assets/pen_mirror.png" type="Texture" id=7]
@@ -22,23 +21,21 @@ margin_right = 40.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 512, 0 )
 
-[node name="Eraser" type="Button" parent="HBoxContainer"]
-margin_right = 39.0
+[node name="Eraser" type="TextureButton" parent="HBoxContainer"]
+margin_right = 40.0
 margin_bottom = 40.0
-custom_styles/hover = ExtResource( 4 )
-custom_styles/pressed = ExtResource( 3 )
-custom_styles/normal = ExtResource( 2 )
-text = "Eraser"
+texture_normal = ExtResource( 3 )
+texture_pressed = ExtResource( 2 )
 
 [node name="Pen" type="TextureButton" parent="HBoxContainer"]
-margin_left = 43.0
-margin_right = 143.0
+margin_left = 44.0
+margin_right = 144.0
 margin_bottom = 40.0
 texture_normal = ExtResource( 7 )
 texture_pressed = ExtResource( 6 )
 
 [node name="Button2" type="Button" parent="HBoxContainer"]
-margin_left = 147.0
+margin_left = 148.0
 margin_right = 468.0
 margin_bottom = 40.0
 size_flags_horizontal = 3

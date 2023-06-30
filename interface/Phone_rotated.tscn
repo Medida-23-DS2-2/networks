@@ -1,12 +1,11 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://assets/Handy_Aus.png" type="Texture" id=1]
-[ext_resource path="res://interface/styles/button_hover.tres" type="StyleBox" id=2]
-[ext_resource path="res://interface/styles/button_normal.tres" type="StyleBox" id=3]
-[ext_resource path="res://interface/styles/button_pressed.tres" type="StyleBox" id=4]
 [ext_resource path="res://interface/Pause.gd" type="Script" id=5]
 [ext_resource path="res://assets/pen_pressed_mirror.png" type="Texture" id=6]
 [ext_resource path="res://assets/pen_mirror.png" type="Texture" id=7]
+[ext_resource path="res://assets/eraser_mirrored_pressed.png" type="Texture" id=8]
+[ext_resource path="res://assets/eraser_mirrored.png" type="Texture" id=9]
 
 [node name="Phone_rotated" type="Control"]
 anchor_right = 1.0
@@ -20,39 +19,34 @@ margin_right = 40.0
 margin_bottom = 40.0
 rect_min_size = Vector2( 512, 0 )
 
-[node name="Button2" type="Button" parent="HBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="HBoxContainer"]
 margin_right = 40.0
 margin_bottom = 40.0
-rect_min_size = Vector2( 0, 40 )
-custom_styles/hover = ExtResource( 2 )
-custom_styles/pressed = ExtResource( 4 )
-custom_styles/normal = ExtResource( 3 )
-text = "Phone"
-icon = ExtResource( 1 )
-expand_icon = true
+rect_min_size = Vector2( 40, 0 )
+texture = ExtResource( 1 )
+expand = true
+stretch_mode = 6
 
 [node name="Button" type="Button" parent="HBoxContainer"]
 margin_left = 44.0
-margin_right = 365.0
+margin_right = 364.0
 margin_bottom = 40.0
 size_flags_horizontal = 3
 text = "Inventory"
 
 [node name="Pen" type="TextureButton" parent="HBoxContainer"]
-margin_left = 369.0
-margin_right = 469.0
+margin_left = 368.0
+margin_right = 468.0
 margin_bottom = 40.0
 texture_normal = ExtResource( 7 )
 texture_pressed = ExtResource( 6 )
 
-[node name="Eraser" type="Button" parent="HBoxContainer"]
-margin_left = 473.0
+[node name="Eraser" type="TextureButton" parent="HBoxContainer"]
+margin_left = 472.0
 margin_right = 512.0
 margin_bottom = 40.0
-custom_styles/hover = ExtResource( 2 )
-custom_styles/pressed = ExtResource( 4 )
-custom_styles/normal = ExtResource( 3 )
-text = "Eraser"
+texture_normal = ExtResource( 9 )
+texture_pressed = ExtResource( 8 )
 
 [connection signal="pressed" from="HBoxContainer/Pen" to="." method="_on_Pen_pressed"]
 [connection signal="pressed" from="HBoxContainer/Eraser" to="." method="_on_Eraser_pressed"]

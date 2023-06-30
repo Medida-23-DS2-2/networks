@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://interface/Title.gd" type="Script" id=1]
 [ext_resource path="res://interface/styles/button_hover.tres" type="StyleBox" id=2]
 [ext_resource path="res://interface/styles/button_pressed.tres" type="StyleBox" id=3]
 [ext_resource path="res://interface/styles/button_normal.tres" type="StyleBox" id=4]
+[ext_resource path="res://assets/Logo.png" type="Texture" id=5]
 
 [node name="TitleContainer" type="Control"]
 anchor_right = 1.0
@@ -22,9 +23,9 @@ alignment = 1
 
 [node name="StartButton2" type="Button" parent="VBoxContainer"]
 margin_left = 750.0
-margin_top = 332.0
+margin_top = 337.0
 margin_right = 850.0
-margin_bottom = 372.0
+margin_bottom = 377.0
 rect_min_size = Vector2( 100, 40 )
 size_flags_horizontal = 4
 custom_styles/hover = ExtResource( 2 )
@@ -35,9 +36,9 @@ text = "Spiel Starten"
 
 [node name="TutorialButton2" type="Button" parent="VBoxContainer"]
 margin_left = 750.0
-margin_top = 376.0
+margin_top = 381.0
 margin_right = 850.0
-margin_bottom = 416.0
+margin_bottom = 421.0
 rect_min_size = Vector2( 100, 40 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -46,23 +47,20 @@ custom_styles/pressed = ExtResource( 3 )
 custom_styles/normal = ExtResource( 4 )
 text = "Tutorial"
 
-[node name="Label" type="Label" parent="VBoxContainer"]
-margin_left = 750.0
-margin_top = 420.0
-margin_right = 850.0
-margin_bottom = 480.0
-rect_min_size = Vector2( 100, 60 )
-size_flags_horizontal = 4
-custom_colors/font_color = Color( 0.298039, 0.145098, 0.105882, 1 )
-text = "NetWorks"
-align = 1
-valign = 1
+[node name="TextureRect" type="TextureRect" parent="VBoxContainer"]
+margin_top = 425.0
+margin_right = 1600.0
+margin_bottom = 475.0
+rect_min_size = Vector2( 0, 50 )
+texture = ExtResource( 5 )
+expand = true
+stretch_mode = 6
 
 [node name="TutorialButton" type="Button" parent="VBoxContainer"]
 margin_left = 750.0
-margin_top = 484.0
+margin_top = 479.0
 margin_right = 850.0
-margin_bottom = 524.0
+margin_bottom = 519.0
 rect_min_size = Vector2( 100, 40 )
 size_flags_horizontal = 4
 size_flags_vertical = 4
@@ -73,9 +71,9 @@ text = "Tutorial"
 
 [node name="StartButton" type="Button" parent="VBoxContainer"]
 margin_left = 750.0
-margin_top = 528.0
+margin_top = 523.0
 margin_right = 850.0
-margin_bottom = 568.0
+margin_bottom = 563.0
 rect_min_size = Vector2( 100, 40 )
 size_flags_horizontal = 4
 custom_styles/hover = ExtResource( 2 )
