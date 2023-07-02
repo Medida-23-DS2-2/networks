@@ -2,6 +2,7 @@ extends TileMap
 
 var computer_timer
 var switch_timer
+var router_timer
 var rng
 
 var connections = []
@@ -33,10 +34,18 @@ func _ready():
 	switch_timer.set_one_shot(false)
 	switch_timer.start()
 	
+	router_timer = Timer.new()
+	add_child(router_timer)
+	switch_timer.connect("timeout", self,"_on_router_Timer_timeout")
+	switch_timer.set_wait_time(15.0)
+	switch_timer.set_one_shot(false)
+	switch_timer.start()
+	
 	_init_remaining_tiles()
 	
 	_on_computer_Timer_timeout()
 	_on_switch_Timer_timeout()
+	_on_router_Timer_timeout()
 
 func _init_remaining_tiles():
 	for i in 16:
@@ -257,6 +266,10 @@ func _on_switch_Timer_timeout():
 	var pos = _get_random_pos()
 	set_cellv(pos, 10)
 	switches.append([pos[0],pos[1], 0, [0,0,0,0]])
+
+func _on_router_Timer_timeout():
+	var pos = _get_random_pos()
+	set_cellv(pos, 27)
 
 func _get_random_pos():
 	if (remaining_tiles.empty()):
