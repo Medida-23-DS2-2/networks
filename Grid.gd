@@ -66,6 +66,9 @@ func _physics_process(_delta):
 		else:
 			# equal to mouse_up
 			_cancel_selection(ptr_index)
+	if touch_helper.state.keys().size() == 0 && last_frame_pointers.size() != 0:
+		for ptr_index in last_frame_pointers:
+			_cancel_selection(ptr_index)
 
 	last_frame_pointers = touch_helper.state.keys()
 	
