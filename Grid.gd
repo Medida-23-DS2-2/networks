@@ -147,7 +147,7 @@ func _cancel_selection(pointer: int):
 			continue
 		if (get_cellv(selected_tiles_by_pointer[pointer][i])==1):
 			set_cellv(selected_tiles_by_pointer[pointer][i], 0)
-			selected_tiles_by_pointer[pointer].clear()
+	selected_tiles_by_pointer[pointer].clear()
 
 func _finish_selection(pointer):
 	if (!selected_tiles_by_pointer.has(pointer)):
